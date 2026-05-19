@@ -8,8 +8,13 @@ app = Flask(__name__)
 # ================= DATABASE CONNECTION =================
 
 def get_db():
-    conn = sqlite3.connect("database.db")
+
+    db_path = os.path.join(os.path.dirname(__file__), "database.db")
+
+    conn = sqlite3.connect(db_path)
+
     conn.row_factory = sqlite3.Row
+
     return conn
 
 
@@ -61,6 +66,7 @@ def order():
     conn = get_db()
 
     for item in data["cart"]:
+
         conn.execute(
             "INSERT INTO orders (item_name, price) VALUES (?, ?)",
             (item["name"], item["price"])
@@ -69,7 +75,9 @@ def order():
     conn.commit()
     conn.close()
 
-    return jsonify({"message": "Order saved successfully"})
+    return jsonify({
+        "message": "Order saved successfully"
+    })
 
 
 # ================= SAVE BOOKING =================
@@ -83,13 +91,20 @@ def booking():
 
     conn.execute(
         "INSERT INTO bookings (name, phone, date, time) VALUES (?, ?, ?, ?)",
-        (data["name"], data["phone"], data["date"], data["time"])
+        (
+            data["name"],
+            data["phone"],
+            data["date"],
+            data["time"]
+        )
     )
 
     conn.commit()
     conn.close()
 
-    return jsonify({"message": "Booking confirmed"})
+    return jsonify({
+        "message": "Booking confirmed"
+    })
 
 
 # ================= HISTORY API =================
@@ -99,12 +114,22 @@ def history():
 
     conn = get_db()
 
-    orders = conn.execute("SELECT * FROM orders").fetchall()
+    orders = conn.execute(
+        "SELECT * FROM orders"
+    ).fetchall()
+
+    bookings = conn.execute(
+        "SELECT * FROM bookings"
+    ).fetchall()
 
     conn.close()
 
     return jsonify({
-        "orders": [dict(row) for row in orders]
+
+        "orders": [dict(row) for row in orders],
+
+        "bookings": [dict(row) for row in bookings]
+
     })
 
 
@@ -117,16 +142,31 @@ def clear_history():
 
     conn.execute("DELETE FROM orders")
 
+    conn.execute("DELETE FROM bookings")
+
     conn.commit()
     conn.close()
 
-    return jsonify({"message": "History cleared"})
+    return jsonify({
+        "message": "History cleared successfully"
+    })
+
+
+# ================= HEALTH CHECK =================
+
+@app.route("/health")
+def health():
+    return jsonify({
+        "status": "running"
+    })
 
 
 # ================= RUN SERVER =================
 
 if __name__ == "__main__":
+
     app.run(
         host="0.0.0.0",
-        port=int(os.environ.get("PORT", 5000))
+        port=int(os.environ.get("PORT", 5000)),
+        debug=False
     )
