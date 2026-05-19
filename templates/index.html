@@ -65,10 +65,11 @@ font-size:12px;
 /* HERO */
 
 .hero{
+
     width:100%;
     min-height:100vh;
 
-    background-image:url("your-image.jpg");
+    background-image:url("/static/images/bg.jpg");
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
@@ -78,23 +79,39 @@ font-size:12px;
     align-items:center;
 
     text-align:center;
+
     padding:20px;
 }
 
-.hero h1{
-font-size:50px;
-margin-bottom:20px;
-}
+/* Mobile Responsive */
 
-.btn{
-padding:12px 25px;
-border:none;
-border-radius:30px;
-background:linear-gradient(#bdfc03 , #42fa05);
-color:rgb(12, 3, 3);
-cursor:pointer;
-}
+@media screen and (max-width:768px){
 
+    .hero{
+
+        min-height:60vh;
+
+        background-size:cover;
+
+        background-position:center;
+    }
+
+    .hero h1{
+
+        font-size:42px;
+        line-height:1.2;
+
+        padding:10px;
+    }
+
+    .btn{
+
+        width:90%;
+        max-width:250px;
+
+        font-size:16px;
+    }
+}
 section{padding:120px 8% 100px;}
 
 
