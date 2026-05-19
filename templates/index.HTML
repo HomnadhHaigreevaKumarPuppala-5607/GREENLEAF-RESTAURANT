@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Leaf Restaurant</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Times New Roman', Times, serif;
+}
+
+html{scroll-behavior:smooth;}
+
+body{
+background:#0f0f0f;
+color:white;
+}
+
+/* NAVBAR */
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 8%;
+background:rgba(0,0,0,0.9);
+position:fixed;
+width:100%;
+top:0;
+z-index:1000;
+}
+
+nav h2{color:#ba0000;}
+
+nav ul{
+list-style:none;
+display:flex;
+gap:25px;
+}
+
+nav ul li a{
+text-decoration:none;
+color:white;
+}
+
+nav ul li a:hover{color:#f70505;}
+
+.cart-icon{
+cursor:pointer;
+font-size:20px;
+}
+
+#cart-count{
+background:linear-gradient(#bdfc03 , #42fa05);
+padding:3px 8px;
+border-radius:50%;
+font-size:12px;
+}
+
+/* HERO */
+
+.hero{
+height:200vh;
+background:url("{{ url_for('static', filename='Images/BG.png') }}") center/cover no-repeat;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+}
+
+.hero h1{
+font-size:50px;
+margin-bottom:15px;
+}
+
+.btn{
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:linear-gradient(#bdfc03 , #42fa05);
+color:rgb(12, 3, 3);
+cursor:pointer;
+}
+
+section{padding:120px 8% 100px;}
+
+/* MENU */
+
+.menu h2{
+text-align:center;
+margin-bottom:40px;
+}
+
+.menu-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+}
+
+.menu-item{
+background:#1a1a1a;
+padding:20px;
+border-radius:15px;
+transition:.3s;
+text-align:center;
+}
+
+.menu-item img{
+width:100%;
+height:180px;
+object-fit:cover;
+border-radius:10px;
+}
+
+.menu-item:hover{
+transform:translateY(-6px);
+box-shadow:0 0 20px #15f904;
+}
+
+.price{
+color:#f1f4f2;
+font-weight:bold;
+margin:10px 0;
+}
+
+.add-btn{
+padding:8px 18px;
+border:none;
+border-radius:20px;
+background:linear-gradient(#bdfc03 , #42fa05);
+color:rgb(23, 6, 6);
+cursor:pointer;
+}
+
+/* CART PANEL */
+
+.cart-panel{
+position:fixed;
+right:-350px;
+top:0;
+width:320px;
+height:100vh;
+background:#1a1a1a;
+padding:20px;
+transition:.4s;
+z-index:2000;
+overflow-y:auto;
+}
+
+.cart-panel.active{right:0;}
+
+.cart-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.close-cart{
+background:none;
+border:none;
+color:white;
+font-size:20px;
+cursor:pointer;
+}
+
+.cart-item{
+display:flex;
+justify-content:space-between;
+margin:8px 0;
+}
+
+.place-order{
+width:100%;
+margin-top:15px;
+padding:10px;
+border:none;
+border-radius:25px;
+background:#2ecc71;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* BOOKING */
+
+.booking{
+background:#111;
+text-align:center;
+}
+
+.booking form{
+max-width:500px;
+margin:auto;
+background:#1a1a1a;
+padding:30px;
+border-radius:15px;
+box-shadow:0 0 20px #39ff14,
+0 0 40px rgba(57,255,20,0.6);
+transition:0.3s;
+}
+
+.booking form:hover{
+box-shadow:0 0 30px #39ff14,
+0 0 60px rgba(57,255,20,0.8);
+}
+
+.booking input{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:none;
+border-radius:8px;
+}
+
+/* OTP FULL SCREEN */
+
+#otpPage{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100vh;
+z-index:5000;
+background:linear-gradient(to bottom,#87ceeb 0%,#c8f7ff 40%,#e6f603 100%);
+justify-content:center;
+align-items:center;
+}
+
+/* Sun */
+
+.sun{
+position:absolute;
+top:80px;
+right:120px;
+width:150px;
+height:150px;
+background:radial-gradient(circle,#dfded9,#ffd700);
+border-radius:50%;
+filter:blur(10px);
+}
+
+/* Clouds */
+
+.cloud{
+position:absolute;
+width:220px;
+height:80px;
+background:white;
+border-radius:100px;
+filter:blur(6px);
+animation:moveCloud linear infinite;
+}
+
+@keyframes moveCloud{
+from{transform:translateX(-250px);}
+to{transform:translateX(120vw);}
+}
+
+/* Grass */
+
+.grass-land{
+position:absolute;
+bottom:0;
+width:100%;
+height:200px;
+background:linear-gradient(to top,#28f104,#bdfc03);
+}
+
+/* OTP BOX */
+
+.container{
+position:relative;
+z-index:10;
+background: linear-gradient(135deg, #d2f703, #cce9f2, #3df705);
+padding:40px;
+border-radius:25px;
+text-align:center;
+width:360px;
+}
+
+.otp-inputs{
+display:flex;
+justify-content:space-between;
+margin:25px 0;
+}
+
+.otp-inputs input{
+width:50px;
+height:60px;
+border-radius:15px;
+border:none;
+outline:none;
+font-size:24px;
+text-align:center;
+}
+
+.message{
+margin-top:20px;
+font-weight:bold;
+}
+
+.success{color:green;}
+.error{color:red;}
+
+footer{
+background:#000;
+padding:20px;
+text-align:center;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+
+<h1>🌿 Green Leaf</h1>
+
+<ul>
+<li><a href="#home">Home</a></li>
+<li><a href="#menu">Menu</a></li>
+<li><a href="#booking">Book Table</a></li>
+</ul>
+
+<div class="cart-icon" onclick="toggleCart()">
+🛒 <span id="cart-count">0</span>
+</div>
+
+<button class="btn" onclick="showHistory()">📜 History</button>
+</nav>
+
+<section class="hero" id="home">
+
+<div>
+<h1 style="color:  #0d0f03;">Pure Veg. Pure Taste.</h1>
+<a href="#menu"><button class="btn">Explore Menu</button></a>
+</div>
+
+</section>
+
+<!-- MENU -->
+
+<section class="menu" id="menu">
+
+<h2>Our Menu</h2>
+
+<div class="menu-grid">
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo2.jpeg') }}">
+<h3>Veg Biryani</h3>
+<p class="price">₹180</p>
+<button class="add-btn" onclick="addToCart('Veg Biryani',180)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo1.jpeg') }}">
+<h3>Masala Dosa</h3>
+<p class="price">₹90</p>
+<button class="add-btn" onclick="addToCart('Masala Dosa',90)">Add</button>
+</div>
+
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo3.jpeg') }}">
+<h3>cake</h3>
+<p class="price">₹120</p>
+<button class="add-btn" onclick="addToCart('cake',120)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo7.jpeg') }}">
+<h3>Rajma Masala</h3>
+<p class="price">₹160</p>
+<button class="add-btn" onclick="addToCart('Rajma Masala',160)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo8.jpeg') }}">
+<h3>Veg Manchurian</h3>
+<p class="price">₹170</p>
+<button class="add-btn" onclick="addToCart('Veg Manchurian',170)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo9.jpeg') }}">
+<h3>Jeera Rice</h3>
+<p class="price">₹130</p>
+<button class="add-btn" onclick="addToCart('Jeera Rice',130)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo10.jpeg') }}">
+<h3>Gulab Jamun</h3>
+<p class="price">₹60</p>
+<button class="add-btn" onclick="addToCart('Gulab Jamun',60)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo11.jpeg') }}">
+<h3>cold coffee</h3>
+<p class="price">₹110</p>
+<button class="add-btn" onclick="addToCart('cold coffee',110)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo5.jpeg') }}">
+<h3>soft Drinks</h3>
+<p class="price">₹50</p>
+<button class="add-btn" onclick="addToCart('soft Drinks',50)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo12.jpeg') }}">
+<h3>Juices</h3>
+<p class="price">₹90</p>
+<button class="add-btn" onclick="addToCart('Juices',90)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo13.jpeg') }}">
+<h3>Doughnut</h3>
+<p class="price">₹70</p>
+<button class="add-btn" onclick="addToCart('Doughnut',70)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo14.jpeg') }}">
+<h3>Veg Noodles </h3>
+<p class="price">₹140</p>
+<button class="add-btn" onclick="addToCart('Veg Noodles ',140)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo15.jpeg') }}">
+<h3>French fries</h3>
+<p class="price">₹100</p>
+<button class="add-btn" onclick="addToCart('French fries',100)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo16.jpeg') }}">
+<h3>Meals</h3>
+<p class="price">₹150</p>
+<button class="add-btn" onclick="addToCart('Meals',150)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo17.jpeg') }}">
+<h3>Ras malai</h3>
+<p class="price">₹80</p>
+<button class="add-btn" onclick="addToCart('Ras malai',80)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo18.jpeg') }}">
+<h3>Kaju katli</h3>
+<p class="price">₹200</p>
+<button class="add-btn" onclick="addToCart('Kaju katli',200)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo19.jpeg') }}">
+<h3>Red velvet cake</h3>
+<p class="price">₹140</p>
+<button class="add-btn" onclick="addToCart('Red velvet cake',140)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo20.jpeg') }}">
+<h3>Tamato Rice</h3>
+<p class="price">₹110</p>
+<button class="add-btn" onclick="addToCart('Tamato Rice',110)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo21.jpeg') }}">
+<h3>Putharekulu</h3>
+<p class="price">₹150</p>
+<button class="add-btn" onclick="addToCart('Putharekulu',150)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo22.jpeg') }}">
+<h3>Kalakand</h3>
+<p class="price">₹120</p>
+<button class="add-btn" onclick="addToCart('Kalakand',120)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo23.jpeg') }}">
+<h3>Veg Burger</h3>
+<p class="price">₹120</p>
+<button class="add-btn" onclick="addToCart('Veg Burger',120)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo24.jpeg') }}">
+<h3>Paneer Butter Masala</h3>
+<p class="price">₹220</p>
+<button class="add-btn" onclick="addToCart('Paneer Butter Masala',220)">Add</button>
+</div>
+
+<div class="menu-item">
+<img src="{{ url_for('static', filename='Images/photo25.jpeg') }}">
+<h3>Cappuccino</h3>
+<p class="price">₹130</p>
+<button class="add-btn" onclick="addToCart('Cappuccino',130)">Add</button>
+</div>
+
+</div>
+
+</section>
+
+<!-- BOOK TABLE -->
+
+<section class="booking" id="booking">
+
+<h2>Book a Table - Vijayawada</h2>
+
+<form onsubmit="saveBooking(event)">
+
+<input type="text" placeholder="Your Name" required>
+<input type="tel" placeholder="Phone Number" required>
+<input type="date" required>
+<input type="time" required>
+
+<button class="btn">Book Table</button>
+
+</form>
+
+</section>
+
+<!-- CART -->
+
+<div class="cart-panel" id="cart">
+
+<div class="cart-header">
+<h3>Order History</h3>
+
+<div>
+<button onclick="clearHistory()" style="margin-right:10px;">🗑 Clear</button>
+<button class="close-cart" onclick="toggleHistory()">✖</button>
+</div>
+
+</div>
+
+<div id="cart-items"></div>
+
+<h3>Total: ₹<span id="total">0</span></h3>
+
+<button class="place-order" onclick="placeOrder()">Place Order</button>
+
+</div>
+
+<!-- HISTORY PANEL -->
+
+<div class="cart-panel" id="history-panel">
+
+<div class="cart-header">
+<h3>Order History</h3>
+<button class="close-cart" onclick="toggleHistory()">✖</button>
+</div>
+
+<div id="history-data"></div>
+
+</div>
+
+<footer>
+
+© 2026 Green Leaf Restaurant
+
+</footer>
+
+<!-- OTP PAGE -->
+
+<div id="otpPage">
+
+<div class="sun"></div>
+<div class="cloud" style="top:100px;animation-duration:60s;"></div>
+<div class="grass-land"></div>
+
+<div class="container">
+
+<h2>OTP Verification</h2>
+
+<div class="otp-inputs">
+<input type="text" maxlength="1">
+<input type="text" maxlength="1">
+<input type="text" maxlength="1">
+<input type="text" maxlength="1">
+<input type="text" maxlength="1">
+<input type="text" maxlength="1">
+</div>
+
+<button onclick="generateOTP()">Send OTP</button>
+<button onclick="verifyOTP()">Verify OTP</button>
+
+<div class="message" id="message"></div>
+
+</div>
+</div>
+
+<script>
+
+/* ================= CART ================= */
+
+let cart = [];
+let total = 0;
+
+function toggleCart(){
+document.getElementById("cart").classList.toggle("active");
+}
+
+function addToCart(name,price){
+cart.push({name,price});
+total += price;
+updateCart();
+}
+
+function updateCart(){
+
+let cartItems = document.getElementById("cart-items");
+cartItems.innerHTML = "";
+
+cart.forEach(item=>{
+cartItems.innerHTML += `
+<div class="cart-item">
+<span>${item.name}</span>
+<span>₹${item.price}</span>
+</div>
+`;
+});
+
+document.getElementById("total").innerText = total;
+document.getElementById("cart-count").innerText = cart.length;
+
+}
+
+
+/* ================= PLACE ORDER ================= */
+
+function placeOrder(){
+
+if(cart.length === 0){
+alert("Cart is empty!");
+return;
+}
+
+fetch("/order",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({cart:cart})
+})
+.then(response=>response.json())
+.then(data=>{
+
+alert("Order Placed Successfully!");
+
+cart = [];
+total = 0;
+updateCart();
+
+});
+
+}
+
+
+/* ================= BOOKING ================= */
+
+function saveBooking(e){
+
+e.preventDefault();
+
+let name = document.querySelector("input[type='text']").value;
+let phone = document.querySelector("input[type='tel']").value;
+let date = document.querySelector("input[type='date']").value;
+let time = document.querySelector("input[type='time']").value;
+
+fetch("/booking",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name:name,
+phone:phone,
+date:date,
+time:time
+})
+})
+.then(res=>res.json())
+.then(data=>{
+
+alert("Booking request sent!");
+
+openOTP();
+
+});
+
+}
+
+
+/* ================= OTP PAGE ================= */
+
+function openOTP(){
+document.getElementById("otpPage").style.display="flex";
+}
+
+const inputs = document.querySelectorAll(".otp-inputs input");
+let generatedOTP = "";
+const message = document.getElementById("message");
+
+inputs.forEach((input,index)=>{
+
+input.addEventListener("input",()=>{
+
+input.value = input.value.replace(/[^0-9]/g,"");
+
+if(input.value && index < inputs.length-1){
+inputs[index+1].focus();
+}
+
+});
+
+});
+
+
+/* ================= GENERATE OTP ================= */
+
+function generateOTP(){
+
+generatedOTP = Math.floor(100000 + Math.random()*900000).toString();
+
+alert("Demo OTP: " + generatedOTP);
+
+message.textContent = "OTP Sent Successfully!";
+message.className = "message success";
+
+}
+
+
+/* ================= VERIFY OTP ================= */
+
+function verifyOTP(){
+
+let entered = "";
+
+inputs.forEach(input => entered += input.value);
+
+if(entered === generatedOTP && generatedOTP !== ""){
+
+message.textContent = "OTP Verified Successfully!";
+message.className = "message success";
+
+setTimeout(()=>{
+
+alert("Table Booked Successfully!");
+
+document.getElementById("otpPage").style.display="none";
+
+inputs.forEach(input=>input.value="");
+
+},1000);
+
+}else{
+
+message.textContent = "Invalid OTP!";
+message.className = "message error";
+
+}
+
+}
+
+/* ================= HISTORY ================= */
+
+function toggleHistory(){
+document.getElementById("history-panel").classList.toggle("active");
+}
+
+function showHistory(){
+
+fetch("/history")
+.then(res => res.json())
+.then(data => {
+
+let historyDiv = document.getElementById("history-data");
+historyDiv.innerHTML = "";
+
+data.orders.forEach(order => {
+
+historyDiv.innerHTML += `
+<div class="cart-item">
+<span>${order.item_name}</span>
+<span>₹${order.price}</span>
+</div>
+`;
+
+});
+
+toggleHistory();
+
+});
+
+}
+
+
+/* CLEAR HISTORY BUTTON */
+
+function clearHistory(){
+
+fetch("/clear_history",{
+method:"POST"
+})
+.then(res => res.json())
+.then(data => {
+
+alert("History cleared successfully!");
+
+document.getElementById("history-data").innerHTML = "";
+
+});
+
+}
+
+</script>
+
+</body>
+</html>

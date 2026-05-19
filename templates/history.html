@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Restaurant History</title>
+
+<style>
+
+body{
+background:#111;
+color:white;
+font-family:Arial;
+padding:40px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-bottom:40px;
+}
+
+th,td{
+border:1px solid #444;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#2ecc71;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Orders History</h2>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Item</th>
+<th>Price</th>
+</tr>
+
+{% for order in orders %}
+<tr>
+<td>{{order[0]}}</td>
+<td>{{order[1]}}</td>
+<td>{{order[2]}}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+
+<h2>Table Bookings</h2>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Phone</th>
+<th>Date</th>
+<th>Time</th>
+</tr>
+
+{% for b in bookings %}
+<tr>
+<td>{{b[0]}}</td>
+<td>{{b[1]}}</td>
+<td>{{b[2]}}</td>
+<td>{{b[3]}}</td>
+<td>{{b[4]}}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
