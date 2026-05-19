@@ -65,17 +65,25 @@ font-size:12px;
 /* HERO */
 
 .hero{
-height:200vh;
-background:url("{{ url_for('static', filename='Images/BG.png') }}") center/cover no-repeat;
-display:flex;
-justify-content:center;
-align-items:center;
-text-align:center;
+    width:100%;
+    min-height:100vh;
+
+    background-image:url("your-image.jpg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+    padding:20px;
 }
 
 .hero h1{
 font-size:50px;
-margin-bottom:15px;
+margin-bottom:20px;
 }
 
 .btn{
@@ -88,6 +96,14 @@ cursor:pointer;
 }
 
 section{padding:120px 8% 100px;}
+
+
+  .btn:hover{
+
+   transform:translateY(-3px) scale(1.05);
+
+    box-shadow:0 10px 25px rgba(140,255,0,0.5);
+}
 
 /* MENU */
 
