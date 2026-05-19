@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=">
 <title>Green Leaf Restaurant</title>
 
 <style>
@@ -65,62 +65,29 @@ font-size:12px;
 /* HERO */
 
 .hero{
-
-    width:100%;
-    min-height:100vh;
-
-    background-image:url("/static/images/bg.jpg");
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    text-align:center;
-
-    padding:20px;
+height:200vh;
+background:url("{{ url_for('static', filename='Images/BG.png') }}") center/cover no-repeat;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
 }
 
-/* Mobile Responsive */
-
-@media screen and (max-width:768px){
-
-    .hero{
-
-        min-height:60vh;
-
-        background-size:cover;
-
-        background-position:center;
-    }
-
-    .hero h1{
-
-        font-size:42px;
-        line-height:1.2;
-
-        padding:10px;
-    }
-
-    .btn{
-
-        width:90%;
-        max-width:250px;
-
-        font-size:16px;
-    }
+.hero h1{
+font-size:50px;
+margin-bottom:15px;
 }
+
+.btn{
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:linear-gradient(#bdfc03 , #42fa05);
+color:rgb(12, 3, 3);
+cursor:pointer;
+}
+
 section{padding:120px 8% 100px;}
-
-
-  .btn:hover{
-
-   transform:translateY(-3px) scale(1.05);
-
-    box-shadow:0 10px 25px rgba(140,255,0,0.5);
-}
 
 /* MENU */
 
