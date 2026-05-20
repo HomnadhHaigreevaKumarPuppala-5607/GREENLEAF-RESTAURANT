@@ -252,18 +252,13 @@ cursor:pointer;
 /* CART PANEL */
 
 .cart-panel{
-position:fixed;
-right:-350px;
-top:0;
-width:320px;
-height:100vh;
-background:#1a1a1a;
-padding:20px;
-transition:.4s;
-z-index:2000;
-overflow-y:auto;
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:80%;
+    height:100vh;
+    transition:0.4s ease;
 }
-
 .cart-panel.active{right:0;}
 
 .cart-header{
@@ -659,7 +654,7 @@ text-align:center;
 
 <div>
 <button onclick="clearHistory()" style="margin-right:10px;">🗑 Clear</button>
-<button class="close-cart" onclick="toggleHistory()">✖</button>
+<button class="close-cart" onclick="toggleCart()">✖</button>
 </div>
 
 </div>
@@ -728,7 +723,16 @@ let cart = [];
 let total = 0;
 
 function toggleCart(){
-document.getElementById("cart").classList.toggle("active");
+
+const cart = document.getElementById("cart");
+
+if(cart.style.right === "0px"){
+    cart.style.right = "-100%";
+}
+else{
+    cart.style.right = "0";
+}
+
 }
 
 function addToCart(name,price){
